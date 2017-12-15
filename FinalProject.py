@@ -111,7 +111,6 @@ class Playlist(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(255))
 	user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-	#music_videos = db.relationship('Music_Video',secondary=playlist_collection,backref=db.backref('playlists',lazy='dynamic'),lazy='dynamic')
 
 class Playlist_to_Song(db.Model):
 	__tablename__ = "association_table"
@@ -127,7 +126,7 @@ class UserUpload(db.Model):
 	playlist_id = db.Column(db.Integer, db.ForeignKey("playlists.id"))
 
 class ItunesForm(FlaskForm):
-	text = StringField("Input an artist or song that you would like to see music videos for.", validators=[Required()])
+	text = StringField("Enter an artist or song that you would like to see music videos for: ", validators=[Required()])
 	submit = SubmitField('Submit')
 
 #get_or_create functions 
@@ -193,7 +192,7 @@ def internal_server_error(e):
 
 @login_manager.user_loader
 def load_user(user_id):
-	return User.query.get(int(user_id)) # returns User object or None
+	return User.query.get(int(user_id)) # Returns User object or None
 
 class RegistrationForm(FlaskForm):
 	email = StringField('Email:', validators=[Required(),Length(1,64),Email()])
@@ -212,7 +211,7 @@ class LoginForm(FlaskForm):
 	submit = SubmitField('Log In')
 
 class CreatePlaylist(FlaskForm):
-	playlist_name = StringField('Enter a new playlist name', validators=[Required()])
+	playlist_name = StringField('Enter a new playlist name: ', validators=[Required()])
 	submit = SubmitField('Create Playlist')
 
 # Login Routes -- Authentication
@@ -257,7 +256,10 @@ def searchMusicVideos(searchTerm):
 		}).json()["results"]
 	for video in data:
 		get_or_create_music_video(video["artistName"], video["trackName"], video["previewUrl"])
-	return data
+		if video["previewUrl"] == 'None':
+			return render_template('No_Results.html', form=Form)
+		else:
+			return data
 
 # Main Routes
 
