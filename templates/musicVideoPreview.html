@@ -1,0 +1,16 @@
+<h1>Preview for {{trackName}} by {{artistName}}</h1>
+
+<form method="POST">
+<select name="playlist">
+	{% for list in playlists %}
+  		<option value="{{list.id}}">{{list.name}}</option>
+  	{% endfor %}
+</select>
+<button type="submit">Add Video to Playlist</button>
+	</form>
+		<br>
+
+
+<video width="640" height="480" controls>
+  <source src="{{result['previewUrl']}}" type="video/mp4">
+  </video>

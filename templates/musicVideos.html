@@ -1,0 +1,9 @@
+<h1>Music Videos for Search: <em>{{searchTerm}}</em></h1>
+
+{% for vid in results %}
+<div>
+	<p><a href="/video/{{vid['artistName']}}/{{vid['trackName']}}"><b>{{vid['trackName']}}<b></a> by {{vid['artistName']}}</p>
+	<p>${{vid["trackPrice"]}} -- {{vid["primaryGenreName"]}}</p>
+</div>
+<br>
+{% endfor %}

@@ -1,0 +1,20 @@
+{% block content %}
+  <h1>Music Video Form</h1>
+  <form method="POST" action="/result">
+      {{ form.hidden_tag() }}
+      {% for message in get_flashed_messages() %}
+      {{ message }}
+      {% endfor %}
+      <p>{{ form.text.label }}{{ form.text() }}</p>
+      {{ form.submit() }}
+  </form>
+  
+  <form method="POST">
+      {{ playlist_form.hidden_tag() }}
+      {% for message in get_flashed_messages() %}
+      {{ message }}
+      {% endfor %}
+      <p>{{ playlist_form.playlist_name.label }}{{ playlist_form.playlist_name() }}</p>
+      {{ playlist_form.submit() }}
+  </form>
+{% endblock %}
