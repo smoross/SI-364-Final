@@ -1,4 +1,3 @@
-# pip install -e git+https://github.com/LevPasha/Instagram-API-python.git#egg=InstagramAPI
 from flask import Flask, request, render_template, make_response, flash, redirect, url_for, send_from_directory, jsonify
 from flask_script import Manager, Shell
 import requests
@@ -20,8 +19,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager, login_required, logout_user, login_user, UserMixin, current_user
 
-#add tests
-
 # Configure base directory of app
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -38,7 +35,6 @@ def allowed_file(filename):
 	return '.' in filename and \
 		   filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-#Create database and change the SQLAlchemy Database URI.
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://localhost/smorossFinal"
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -53,7 +49,7 @@ app.config['MAIL_SUBJECT_PREFIX'] = '[Music Video App]'
 app.config['MAIL_SENDER'] = 'smoross364@gmail.com'
 app.config['ADMIN'] = 'smoross364@gmail.com'
 
-# Setting up Flask debug
+# Set up Flask debug
 manager = Manager(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db) 
@@ -79,13 +75,10 @@ def send_email(to, subject, template, **kwargs):
 		msg.html = render_template(template + '.html', **kwargs)
 		mail.send(msg)
 
-#------------------------
-
 # Models
 
-#Search & Music Video = Many:Many
-#TO DO: Add a table for Search
-#One:Many = User:Playlists
+# Playlists:Music_Videos = Many:Many
+# User:Playlists = One:Many
 
 class Music_Video(db.Model):
 	__tablename__ = 'music_videos'
@@ -133,13 +126,9 @@ class UserUpload(db.Model):
 	fileName = db.Column(db.String, unique=True)
 	playlist_id = db.Column(db.Integer, db.ForeignKey("playlists.id"))
 
-#----------------------
-
 class ItunesForm(FlaskForm):
 	text = StringField("Input an artist or song that you would like to see music videos for.", validators=[Required()])
 	submit = SubmitField('Submit')
-
-#----------------------
 
 #get_or_create functions 
 def get_or_create_user(db_session, username, email):
@@ -152,7 +141,6 @@ def get_or_create_user(db_session, username, email):
 		db_session.commit()
 		return user
 
-#code similar to hashtag hw5?
 def get_or_create_search(db_session, input_text): 
 	search = db_session.query(Search).filter_by(text=input_text).first()
 	if search:
@@ -184,7 +172,6 @@ def get_or_create_playlist_song(playlist_id, title):
 		db.session.commit()
 		return playlist_song
 
-#Creating a database...???
 def get_or_create_playlist(name, user_id):
 	playlist = db.session.query(Playlist).filter_by(name = name, user_id=user_id).first()
 	if playlist:
@@ -195,7 +182,6 @@ def get_or_create_playlist(name, user_id):
 		db.session.commit()
 		return playlist
 	
-
 # Error handling routes
 @app.errorhandler(404)
 def page_not_found(e): 
@@ -215,7 +201,6 @@ class RegistrationForm(FlaskForm):
 	password2 = PasswordField("Confirm Password:",validators=[Required()])
 	submit = SubmitField('Register User')
 
-	#Additional checking methods for the form
 	def validate_email(self,field):
 		if User.query.filter_by(email=field.data).first():
 			raise ValidationError('Email already registered.')
@@ -231,7 +216,6 @@ class CreatePlaylist(FlaskForm):
 	submit = SubmitField('Create Playlist')
 
 # Login Routes -- Authentication
-# Which of these do I need?
 @app.route('/login',methods=["GET","POST"])
 def login():
 	form = LoginForm()
@@ -266,8 +250,6 @@ def register_user():
 def secret():
 	return "Only authenticated users can do this! Try to log in or contact the site admin."
 
-#--------------------------
-
 def searchMusicVideos(searchTerm):
 	data = requests.get("https://itunes.apple.com/search", params = {
 		"entity" : "musicVideo",
@@ -291,7 +273,7 @@ def form():
 
 @app.route('/result', methods= ['POST'])
 @login_required
-def result(): #search for all music videos based on query
+def result(): 
 	form = ItunesForm(request.form)
 	if request.method == 'POST' and form.validate_on_submit():
 		text = form.text.data
@@ -310,7 +292,7 @@ def trackName(artistName, trackName):
 	playlist_for_user = db.session.query(Playlist).filter_by(user_id=current_user.id).all()
 	return render_template('musicVideoPreview.html', result = data[0], trackName=trackName, artistName=artistName, playlists=playlist_for_user)
 
-@app.route('/playlists') #add videos into a personal playlist
+@app.route('/playlists')
 @login_required
 def show_playlist():
 	data_dict = {}
@@ -354,5 +336,4 @@ def ajax(playlist_name):
 
 if __name__ == '__main__':
 	db.create_all()
-	manager.run() # Run with this: python main_app.py runserver
-	# Also provides more tools for debugging
+	manager.run() # Run with: python main_app.py runserver

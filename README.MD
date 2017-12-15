@@ -3,7 +3,7 @@
 # To Run My Application
 Create the database smorossFinal by writing the terminal command 'createdb smorossFinal' before running my application. 
 Input the terminal command python 'Final.py' runserver in order to run my application. This will connect your server to 
-local host 5000. You can input http://localhost:5000 into your browser to reach the application. No additional imports are necessary. 
+local host 5000. You can input http://localhost:5000 into your browser to access the application. No additional imports are necessary. 
 
 # What My Application Does
 My application is designed for users who are interested in music to search for music videos and create music video playlists.
@@ -14,7 +14,7 @@ for an artist or song title, and receives a resulting list of music video titles
 directs the user to a preview of the music video. The user can play/pause the video, adjust the video sound, make the video full-screen,
 and even download the video by clicking the download button on the bottom left of the video. Above the video, the user has the option to
 add the video to one of their music video playlists (If the user has no playlists yet, they can navigate to the route '/form' and create
-a new playlist name.) Once the user clicks 'Add song to playlist,' the app navigates to the '/playlists' route, which shows a list of 
+a new playlist.) Once the user clicks 'Add song to playlist,' the app navigates to the '/playlists' route, which shows a list of 
 all the users playlists with the song titles under each one. Above each playlist, there is an option for the user to upload an image 
 to compliment the playlist. When the user selects, 'Show Art,' the browser flashes the link that will display this image (using AJAX).
 All of these files are saved to the cover_art table in the smorossFinal database.
