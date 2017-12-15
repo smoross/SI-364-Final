@@ -2,7 +2,7 @@
 
 # To Run My Application
 Create the database smorossFinal by writing the terminal command 'createdb smorossFinal' before running my application. 
-Input the terminal command python 'Final.py' runserver in order to run my application. This will connect your server to 
+Input the terminal command python 'FinalProject.py' runserver in order to run my application. This will connect your server to 
 local host 5000. You can input http://localhost:5000 into your browser to access the application. No additional imports are necessary. 
 
 # What My Application Does
